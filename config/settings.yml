@@ -1,0 +1,4 @@
+groups:
+  group_forums_enabled:
+    default: true
+    client: true

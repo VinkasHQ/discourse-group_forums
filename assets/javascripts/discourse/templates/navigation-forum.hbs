@@ -1,0 +1,9 @@
+{{#d-section bodyClass="navigation-forum" scrollTop="false"}}
+  {{bread-crumbs categories=categories tags=tags group=group}}
+
+  {{navigation-bar navItems=navItems filterMode=filterMode group=group}}
+
+  {{#if canCreateTopic}}
+    <button id="create-topic" class='btn btn-default' {{action "createTopic"}}><i class='fa fa-plus'></i>{{i18n 'topic.create'}}</button>
+  {{/if}}
+{{/d-section}}

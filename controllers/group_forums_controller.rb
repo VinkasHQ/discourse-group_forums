@@ -1,0 +1,3 @@
+class GroupForumsController < GroupsController
+
+end
