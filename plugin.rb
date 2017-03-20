@@ -31,9 +31,9 @@ after_initialize do
   Group.class_eval do
 
     def forum_category_ids
-      @primary_category_ids ||= CategoryCustomField
-                                  .where(name: "forum_group_id", value: id)
-                                  .pluck(:category_id)
+      @forum_category_ids ||= CategoryCustomField
+                                .where(name: "forum_group_id", value: id)
+                                .pluck(:category_id)
     end
 
     def forum_categories
