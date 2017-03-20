@@ -1,37 +1,8 @@
-<div class="container group">
-  <div class='group-details-container'>
-    <div class='group-info'>
-      {{group-membership-button model=model
-        createNewMessageViaParams='createNewMessageViaParams'
-        showLogin='showLogin'}}
-
-      {{#if model.flair_url}}
-        <span class='group-avatar-flair'>
-          {{avatar-flair
-            flairURL=model.flair_url
-            flairBgColor=model.flair_bg_color
-            flairColor=model.flair_color
-            groupName=model.name}}
-        </span>
-      {{/if}}
-
-      {{#link-to 'group' model.name}}
-        <span class='group-info-name'>{{groupName}}</span>
-
-        <div>
-          {{#if model.full_name}}<span class='group-info-full-name'>{{model.name}}</span>{{/if}}
-        </div>
-      {{/link-to}}
-    </div>
-
-    {{#if model.bio_cooked}}
-      <hr/>
-
-      <div class='group-bio'>
-        <p>{{{model.bio_cooked}}}</p>
-      </div>
-    {{/if}}
-  </div>
+<div class="container forum">
+  {{group-details model=model
+      groupName=groupName
+      createNewMessageViaParams='createNewMessageViaParams'
+      showLogin='showLogin'}}
 
   <div class="list-controls">
     <div class="container">
@@ -39,7 +10,7 @@
     </div>
   </div>
 
-  <div class='group-outlet'>
+  <div class='forum-outlet'>
     {{outlet "list-container"}}
   </div>
 </div>

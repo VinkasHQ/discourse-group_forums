@@ -1,11 +1,11 @@
-{{#if siteSettings.group_forums_enabled}}
-<div class="group_forums">
-  <label><h4>{{i18n 'group_forums.title'}}</h4></label>
-  <section class='field'>
-    <label>
-      {{i18n 'group_forums.label.primary_group'}}
-      {{combo-box content=groups value=category.primary_group_id none="group_forums.label.choose_group"}}
-    </label>
-  </section>
-</div>
+{{#if siteSettings.enable_group_forums}}
+  <div class="group_forums">
+    <label><h4>{{i18n 'group_forums.title'}}</h4></label>
+    <section class='field'>
+      <label>
+        {{i18n 'group_forums.label.forum_group'}}
+        {{combo-box content=groups value=category.forum_group_id none="group_forums.label.choose_group"}}
+      </label>
+    </section>
+  </div>
 {{/if}}

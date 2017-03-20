@@ -74,7 +74,7 @@ export default function(filter, extras) {
       this.screenTrack.stop();
 
       const group = this.modelFor("forum"),
-            findOpts = filterQueryParams(data, { 'include_category_ids': group.categories }),
+            findOpts = filterQueryParams(data, { 'include_category_ids': group.forum_category_ids }),
             findExtras = { cached: this.isPoppedState(transition) };
 
       this.set('group', group);

@@ -4,7 +4,7 @@
 # authors: Vinoth Kannan (vinothkannan@vinkas.com)
 # url: https://github.com/VinkasHQ/discourse-group_forums
 
-enabled_site_setting :group_forums_enabled
+enabled_site_setting :enable_group_forums
 
 PLUGIN_NAME = "group_forums".freeze
 
@@ -12,32 +12,64 @@ register_asset "stylesheets/group_forums.scss"
 
 after_initialize do
 
-  load File.expand_path('../controllers/group_forums_controller.rb', __FILE__)
+  load File.expand_path('../app/controllers/group_forums_controller.rb', __FILE__)
 
-  Group.class_eval do
+  load File.expand_path('../app/serializers/group_forum_serializer.rb', __FILE__)
 
-    def primary_category_ids
-      CategoryCustomField
-        .where(name: "primary_group_id", value: id)
-        .pluck(:category_id)
-    end
+  Site.class_eval do
 
-    def primary_categories
-      Category.where(id: primary_category_ids)
+    def forums
+      Group.find(GroupCustomField.where(name: "enable_forum", value: true).pluck(:group_id))
     end
 
   end
 
-  module ::GroupDiscourse
+  SiteSerializer.class_eval do
+    has_many :forums, embed: :objects, serializer: GroupForumSerializer
+  end
+
+  Group.class_eval do
+
+    def forum_category_ids
+      @primary_category_ids ||= CategoryCustomField
+                                  .where(name: "forum_group_id", value: id)
+                                  .pluck(:category_id)
+    end
+
+    def forum_categories
+      Category.find(forum_category_ids)
+    end
+
+  end
+
+  Category.class_eval do
+
+    def forum_group_id
+      @forum_group_id ||= custom_fields["forum_group_id"]
+    end
+
+    def forum_group
+      return nil unless forum_group_id.present?
+
+      Group.find(forum_group_id)
+    end
+
+  end
+
+  BasicCategorySerializer.class_eval do
+    attribute :forum_group, key: :group, serializer: BasicGroupSerializer
+  end
+
+  module ::GroupForums
     class Engine < ::Rails::Engine
       engine_name PLUGIN_NAME
-      isolate_namespace GroupDiscourse
+      isolate_namespace GroupForums
     end
   end
 
   require_dependency 'list_controller'
 
-  class ::GroupDiscourse::ListController < ::ListController
+  class ::GroupForums::ListController < ::ListController
     requires_plugin PLUGIN_NAME
 
     alias :default_build_topic_list_options :build_topic_list_options
@@ -47,7 +79,7 @@ after_initialize do
 
       group = Group.find_by(name: params.require(:name))
       @title = group.full_name || group.name
-      options[:include_category_ids] = group.primary_category_ids
+      options[:include_category_ids] = group.forum_category_ids
 
       options
     end
@@ -55,7 +87,7 @@ after_initialize do
   end
 
   BasicGroupSerializer.class_eval do
-    attribute :primary_category_ids, key: :categories
+    attribute :forum_category_ids
   end
 
   require_dependency 'topic_query'
@@ -68,7 +100,7 @@ after_initialize do
     result
   end
 
-  GroupDiscourse::Engine.routes.draw do
+  GroupForums::Engine.routes.draw do
     Discourse.filters.each do |filter|
       get "#{filter}" => "list##{filter}", constraints: { format: /(json|html)/ }
     end
@@ -104,6 +136,6 @@ after_initialize do
   Discourse::Application.routes.prepend do
     root "group_forums#index", constraints: HomePageConstraint.new("forums"), :as => "forums_index"
     get "forums" => "group_forums#index"
-    mount ::GroupDiscourse::Engine, at: "/f/:name"
+    mount ::GroupForums::Engine, at: "/f/:name"
   end
 end

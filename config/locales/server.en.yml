@@ -1,4 +1,4 @@
 en:
   site_settings:
-    group_discourse_enabled: 'Enable group forums'
+    enable_group_forums: 'Enable forum feature on individual groups'
     group_menu: 'Determine which items appear in the group navigation, and in what order. Example latest|new|unread|top'

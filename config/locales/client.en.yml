@@ -4,8 +4,8 @@ en:
       forums:
         title: "Forums"
         help: "all available group forums"
-    group_discourse:
-      title: "Group Discourse"
+    group_forums:
+      title: "Group Forums"
       label:
         choose_group: "Choose a group"
-        primary_group: "Primary group"
+        forum_group: "Forum group"

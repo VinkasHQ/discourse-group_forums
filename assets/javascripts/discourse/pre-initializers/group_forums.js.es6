@@ -12,17 +12,18 @@ export default {
 
     Category.reopen({
 
-      @computed('custom_fields.primary_group_id')
-      primary_group_id: {
+      @computed('custom_fields.forum_group_id')
+      forum_group_id: {
         get() {
-          return this.get("custom_fields.primary_group_id");
+          return this.get("custom_fields.forum_group_id");
         },
         set(value) {
-          this.set("custom_fields.primary_group_id", value);
+          this.set("custom_fields.forum_group_id", value);
         }
       }
 
     });
+
 
     NavItem.reopen({
 

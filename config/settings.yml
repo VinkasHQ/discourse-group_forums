@@ -1,4 +1,4 @@
 groups:
-  group_forums_enabled:
+  enable_group_forums:
     default: true
     client: true

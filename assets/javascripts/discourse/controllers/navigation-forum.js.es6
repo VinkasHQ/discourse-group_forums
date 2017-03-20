@@ -7,7 +7,7 @@ export default NavigationDefaultController.extend({
   @computed("group")
   categories(group) {
     return this._super()
-            .filter(c => group.categories.indexOf(c[`id`]) != -1)
+            .filter(c => group.forum_category_ids.indexOf(c[`id`]) != -1)
   },
 
   @computed("filterMode", "group")
